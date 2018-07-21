@@ -25,7 +25,8 @@ class App extends LitElement {
                     for (const name of value) {
                         itemTemplates.push(html`
                             <mwc-formfield label=${name}>
-                                <mwc-radio name=${capName}></mwc-radio>
+                                <mwc-radio name=${capName}>
+                                </mwc-radio>
                             </mwc-formfield>
                         `);
                     }
