@@ -101,19 +101,6 @@ class App extends LitElement {
             self.settings = track.getSettings();
             console.log(capabilities);
             console.log(track.getSettings());
-            await track.applyConstraints({
-                advanced: [{
-                    zoom: capabilities.zoom.min,
-                    // frameRate: 2,
-                    // aspectRatio: 1,
-                    sharpness: 7,
-                }]
-            })
-            await track.applyConstraints({
-                advanced: [{
-                    // aspectRatio: 1,
-                }]
-            })
         }
 
         video.srcObject = stream;
