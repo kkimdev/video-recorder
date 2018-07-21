@@ -1,0 +1,14 @@
+root: true
+extends: airbnb-base
+plugins:
+    - html
+settings:
+    html/report-bad-indent: error
+    html/indent: '0'
+env:
+    browser: true
+rules:
+    import/extensions: [error, never, {js: always}]
+    no-underscore-dangle: ['error', {
+      allowAfterThis: true,
+    }]
