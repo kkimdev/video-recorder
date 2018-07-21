@@ -7,14 +7,16 @@ import './material-components-web-components/packages/slider/mwc-slider.js';
 class App extends LitElement {
     static get properties() {
         return {
-            capabilities: Object
+            capabilities: Object,
+            settings: Object,
         };
     }
 
-    _render({ capabilities }) {
+    _render({ capabilities, settings }) {
         console.log('cap : ', capabilities);
-        const items = [1, 2, 3];
-        const itemTemplates = [];
+        console.log('cap : ', settings);
+
+        let itemTemplates = [];
         if (capabilities !== undefined) {
             for (const capName in capabilities) {
                 const value = capabilities[capName];
@@ -39,26 +41,38 @@ class App extends LitElement {
                     </div>
                 `);
                 } else if (new Set(Object.keys(value)) === new Set(["max", "min"])) {
-                    console.log('max min: ', value);
                 } else {
-                    console.log('jaja', value);
-                    console.log('range', value.min, value.max);
+                    // console.log('jaja', capName, value);
+                    // console.log('range', value.min, value.max);
+                    // TODO: colorTemperature has "Error: Cannot set min to be greater than the slider's maximum value" error
                     itemTemplates.push(html`
                         <div>
                             <mwc-formfield label=${capName}>
-                                <mwc-slider discrete markers min=${value.min} max=${value.max} value="" step=${value.step}></mwc-slider>
+                                <mwc-slider on-MDCSlider:input=${async (e) => {
+                                    await this.track.applyConstraints({
+                                        advanced: [{
+                                            [capName]: e.detail.value,
+                                        }]
+                                    })
+                                    
+                                }} id=${capName} discrete markers max=${value.max} min=${value.min} value=${settings[capName]} step=${value.step}></mwc-slider>
+                                <label>${settings[capName]}</label>
                             </mwc-formfield>
+                            <script>
+                                <!-- console.log(sdsdfsdfsdf);
+                                const elem = this.shadowRoot.getElementById(${capName});
+                                console.log(elem); -->
+                            </script>
                         </div>
                     `);
                 }
-                // itemTemplates.push(html`<li>${capName} ${JSON.stringify(value)}</li>`);
             }
         }
 
         return html`
         <video id="video"></video>
         <div>
-            <mwc-button raised>Apply</mwc-button>
+            <mwc-button raised on-click=${(e) => console.log('clicked')} >Apply</mwc-button>
         </div>
         <ul>
             ${itemTemplates}
@@ -75,6 +89,7 @@ class App extends LitElement {
         const video = this.shadowRoot.getElementById('video');
 
         const track = stream.getVideoTracks()[0];
+        this.track = track;
         video.addEventListener('loadedmetadata', () => {
             window.setTimeout(() => (
                 onCapabilitiesReady(track.getCapabilities())
@@ -83,6 +98,7 @@ class App extends LitElement {
         self = this;
         async function onCapabilitiesReady(capabilities) {
             self.capabilities = capabilities;
+            self.settings = track.getSettings();
             console.log(capabilities);
             console.log(track.getSettings());
             await track.applyConstraints({
@@ -95,7 +111,7 @@ class App extends LitElement {
             })
             await track.applyConstraints({
                 advanced: [{
-                    aspectRatio: 1,
+                    // aspectRatio: 1,
                 }]
             })
         }
