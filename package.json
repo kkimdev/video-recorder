@@ -1,6 +1,9 @@
 {
   "dependencies": {
     "@material/mwc-button": "^0.1.2",
+    "@material/mwc-formfield": "^0.1.2",
+    "@material/mwc-radio": "^0.1.2",
+    "@material/slider": "^0.36.0",
     "@polymer/lit-element": "^0.5.2",
     "@webcomponents/webcomponentsjs": "^2.0.3",
     "eslint": "^5.1.0",

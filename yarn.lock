@@ -27,6 +27,16 @@
     "@material/animation" "^0.34.0"
     "@material/theme" "^0.4.0"
 
+"@material/form-field@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/form-field/-/form-field-0.35.0.tgz#2802b03b9a5608d84064776fa1a7e698c587f25d"
+  dependencies:
+    "@material/base" "^0.35.0"
+    "@material/rtl" "^0.35.0"
+    "@material/selection-control" "^0.35.0"
+    "@material/theme" "^0.35.0"
+    "@material/typography" "^0.35.0"
+
 "@material/mwc-base@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@material/mwc-base/-/mwc-base-0.1.2.tgz#a17988248c7fe4252305cee4f2fb604f5b0d047a"
@@ -43,11 +53,27 @@
     "@material/mwc-ripple" "^0.1.2"
     "@polymer/lit-element" "^0.5.2"
 
+"@material/mwc-formfield@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@material/mwc-formfield/-/mwc-formfield-0.1.2.tgz#64d7039fafe9fb21df1436435b835447502cf93c"
+  dependencies:
+    "@material/form-field" "^0.35.0"
+    "@material/mwc-base" "^0.1.2"
+    "@polymer/lit-element" "^0.5.2"
+
 "@material/mwc-icon@^0.1.2":
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/@material/mwc-icon/-/mwc-icon-0.1.2.tgz#32ec2f5a48a30014ed97451de0862b1bf51f14e3"
   dependencies:
     "@material/mwc-base" "^0.1.2"
+    "@polymer/lit-element" "^0.5.2"
+
+"@material/mwc-radio@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@material/mwc-radio/-/mwc-radio-0.1.2.tgz#1d075dd93c22fd205780e0ad9062b4062997b519"
+  dependencies:
+    "@material/mwc-base" "^0.1.2"
+    "@material/radio" "^0.35.0"
     "@polymer/lit-element" "^0.5.2"
 
 "@material/mwc-ripple@^0.1.2":
@@ -57,6 +83,16 @@
     "@material/mwc-base" "^0.1.2"
     "@material/ripple" "^0.35.0"
     "@polymer/lit-element" "^0.5.2"
+
+"@material/radio@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/radio/-/radio-0.35.0.tgz#508a270838e6f798b5c9083252e7bb1a365ca61e"
+  dependencies:
+    "@material/animation" "^0.34.0"
+    "@material/base" "^0.35.0"
+    "@material/ripple" "^0.35.0"
+    "@material/selection-control" "^0.35.0"
+    "@material/theme" "^0.35.0"
 
 "@material/ripple@^0.35.0":
   version "0.35.0"
@@ -68,6 +104,25 @@
 "@material/rtl@^0.35.0":
   version "0.35.0"
   resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-0.35.0.tgz#caae659e35a9bf1b9d91c734c8a3315a81bcde21"
+
+"@material/rtl@^0.36.0":
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/@material/rtl/-/rtl-0.36.0.tgz#a81b587981dc6e09f51e26da8a7447f89358ccd5"
+
+"@material/selection-control@^0.35.0":
+  version "0.35.0"
+  resolved "https://registry.yarnpkg.com/@material/selection-control/-/selection-control-0.35.0.tgz#e13640b37f5719f43edc315625ee862f1f3a8302"
+  dependencies:
+    "@material/ripple" "^0.35.0"
+
+"@material/slider@^0.36.0":
+  version "0.36.0"
+  resolved "https://registry.yarnpkg.com/@material/slider/-/slider-0.36.0.tgz#340955e88504402c25c2dcce0cdf4062a7725fc7"
+  dependencies:
+    "@material/animation" "^0.34.0"
+    "@material/base" "^0.35.0"
+    "@material/rtl" "^0.36.0"
+    "@material/theme" "^0.35.0"
 
 "@material/theme@^0.35.0":
   version "0.35.0"
