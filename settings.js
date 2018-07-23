@@ -13,8 +13,8 @@ class App extends LitElement {
     }
 
     _render({ capabilities, settings }) {
-        console.log('cap : ', capabilities);
-        console.log('cap : ', settings);
+        console.log('capabilities : ', capabilities);
+        console.log('settings : ', settings);
 
         if (capabilities === undefined)
             return html``;
@@ -25,19 +25,20 @@ class App extends LitElement {
             // console.log(value);
             // console.log(value instanceof MediaSettingsRange);
             if (value instanceof Array) {
-                itemTemplates.push(html`<p> ${capName} </p>`);
+                itemTemplates.push(html`<div><mwc-formfield alignEnd label=${capName}>`);
                 for (const name of value) {
                     itemTemplates.push(html`
                         <mwc-formfield label=${name}>
-                            <mwc-radio name=${capName} checked?="${settings[capName] === capName}">
+                            <mwc-radio name=${capName} checked?="${settings[capName] === capName}" on-change="${(e) => console.log(e)}">
                             </mwc-radio>
                         </mwc-formfield>
                     `);
                 }
+                itemTemplates.push(html`</mwc-formfield></div>`);
             } else if (typeof value === 'string' || value instanceof String) {
                 itemTemplates.push(html`
                 <div>
-                    <mwc-formfield label=${capName}>
+                    <mwc-formfield alignEnd label=${capName}>
                         ${value}
                     </mwc-formfield>
                 </div>
@@ -49,7 +50,7 @@ class App extends LitElement {
                 // TODO: colorTemperature has "Error: Cannot set min to be greater than the slider's maximum value" error
                 itemTemplates.push(html`
                     <div>
-                        <mwc-formfield label=${capName}>
+                        <mwc-formfield alignEnd label=${capName}>
                             <mwc-slider on-MDCSlider:input="${
                                         async (e) => {
                                             await this._track.applyConstraints({
