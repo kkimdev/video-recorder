@@ -13,8 +13,8 @@ class App extends LitElement {
     }
 
     _render({ capabilities, settings }) {
-        console.log('capabilities : ', capabilities);
-        console.log('settings : ', settings);
+        // console.log('capabilities : ', capabilities);
+        // console.log('settings : ', settings);
 
         if (capabilities === undefined)
             return html``;
@@ -25,7 +25,8 @@ class App extends LitElement {
             // console.log(value);
             // console.log(value instanceof MediaSettingsRange);
             if (value instanceof Array) {
-                itemTemplates.push(html`<div><mwc-formfield alignEnd label=${capName}>`);
+                itemTemplates.push(html`<div>
+    <mwc-formfield alignEnd label=${capName}>`);
                 for (const name of value) {
                     itemTemplates.push(html`
                         <mwc-formfield label=${name}>
@@ -34,7 +35,8 @@ class App extends LitElement {
                         </mwc-formfield>
                     `);
                 }
-                itemTemplates.push(html`</mwc-formfield></div>`);
+                itemTemplates.push(html`</mwc-formfield>
+</div>`);
             } else if (typeof value === 'string' || value instanceof String) {
                 itemTemplates.push(html`
                 <div>
@@ -45,8 +47,7 @@ class App extends LitElement {
             `);
             } else if (new Set(Object.keys(value)) === new Set(["max", "min"])) {
             } else {
-                // console.log('jaja', capName, value);
-                // console.log('range', value.min, value.max);
+                // TODO: continuous step
                 // TODO: colorTemperature has "Error: Cannot set min to be greater than the slider's maximum value" error
                 itemTemplates.push(html`
                     <div>
@@ -76,8 +77,18 @@ class App extends LitElement {
 
     set track(track) {
         this._track = track;
-        this.capabilities = track.getCapabilities();
-        this.settings = track.getSettings();
+        if (track === null) {
+            this.capabilities = undefined;
+            this.settings = undefined;
+        } else {
+            this.capabilities = track.getCapabilities();
+            this.settings = track.getSettings();
+        }
+    }
+    ready() {
+        super.ready();
+        console.log(Object.keys(this));
+        console.log(this.attributes);
     }
 }
 
