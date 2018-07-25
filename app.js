@@ -3,27 +3,48 @@ import '@material/mwc-button/mwc-button.js';
 import '@material/mwc-radio/mwc-radio.js';
 import '@material/mwc-formfield/mwc-formfield.js';
 import '@polymer/iron-pages'
+import 'material-design-lite/material.js'
+
 import './material-components-web-components/packages/slider/mwc-slider.js';
 import './material-components-web-components/packages/tabs/mwc-tab.js';
-import { TabBar } from './material-components-web-components/packages/tabs/mwc-tab-bar.js';
 import './material-components-web-components/packages/tabs/mwc-tab-bar-scroller.js';
+import { TabBar } from './material-components-web-components/packages/tabs/mwc-tab-bar.js';
+
 import './settings.js'
 
 class TabBarFix extends TabBar {
     constructor() {
         super();
-        this._requestRender = this.requestRender; //() => { this.requestRender() };
+        this._requestRender = this.requestRender;
     }
 }
 customElements.define('mwc-tab-bar-fix', TabBarFix);
 
 class App extends LitElement {
 
+    constructor() {
+        super();
+        this._isRecording = false;
+    }
+
+    async ready() {
+        super.ready();
+        this.devices = await navigator.mediaDevices.enumerateDevices();
+    }
+
     static get properties() {
         return {
             devices: Array,
             tracks: Array,
+            _isRecording: Boolean,
         };
+    }
+
+    _propertiesChanged(props, changedProps, prevProps) {
+        super._propertiesChanged(props, changedProps, prevProps);
+        if (changedProps !== null && 'devices' in changedProps) {
+            this._start();
+        }
     }
 
     _render({ devices, tracks }) {
@@ -34,7 +55,6 @@ class App extends LitElement {
         const videoInputDevices = devices.filter(device => device.kind === 'videoinput');
         const audioOutputDevices = devices.filter(device => device.kind === 'audiooutput');
 
-        console.log(tracks);
         return html`
         <style>
         * {
@@ -51,7 +71,7 @@ class App extends LitElement {
         </mwc-tab-bar-fix>
         <iron-pages id="pages" selected="0">
             <div>
-                <mwc-button raised onclick="${this._start.bind(this)}">Record</mwc-button>
+                <mwc-button raised onclick="${this._startOrStopRecording.bind(this)}">Record</mwc-button>
             </div>
             <div>                
                 <div class="select">
@@ -74,7 +94,7 @@ class App extends LitElement {
                         ${videoInputDevices.map(device => html`<option value="${device.deviceId}">${device.label}</option>`)}
                     </select>
                 </div>
-                <vr-settings id="settings"></vr-settings>
+                ${tracks.map(track => html`<vr-settings track="${track}"></vr-settings>`)}
             </div>
         </iron-pages>
         `;
@@ -85,17 +105,11 @@ class App extends LitElement {
         pages.selected = index;
     }
 
-    //     <mwc-tab-bar-scroller>
-    //     <mwc-tab-bar id="tab-bar">
-    //         ${tracks.map(track => html`<mwc-tab label="${track.kind}"></mwc-tab>`)}
-    //     </mwc-tab-bar>
-    // </mwc-tab-bar-scroller>
     async _start() {
         if (this._stream instanceof MediaStream) {
             this._stream.getTracks().forEach(track => track.stop());
         }
         delete this._stream;
-        this._settings.track = null;
 
         const audioInputSelect = this.shadowRoot.querySelector('select#audioSource');
         const videoInputSelect = this.shadowRoot.querySelector('select#videoSource');
@@ -111,17 +125,33 @@ class App extends LitElement {
         video.srcObject = this._stream;
         await video.setSinkId(audioOutputSelect.value);
         video.play();
-        window.setTimeout(() => {
-            const track = this._stream.getVideoTracks()[0];
-            this._settings.track = track;
-        }, 1000);
-
     }
 
-    async ready() {
-        super.ready();
-        this._settings = this.shadowRoot.getElementById('settings');
-        this.devices = await navigator.mediaDevices.enumerateDevices();
+    _startOrStopRecording() {
+        if (this._isRecording)
+            this._stopRecording();
+        else
+            this._startRecording();
+    }
+
+    _startRecording() {
+        this._isRecording = true;
+        this._recordedBlobs = [];
+        this._mediaRecorder = new MediaRecorder(this._stream, {});
+        this._mediaRecorder.ondataavailable = (event) => {
+            if (event.data && event.data.size > 0) {
+                this._recordedBlobs.push(event.data);
+            }
+        };
+        this._mediaRecorder.start(10); // collect 10ms of data
+    }
+
+    _stopRecording() {
+        this._isRecording = false;
+        this._mediaRecorder.stop();
+        const blob = new Blob(this._recordedBlobs, { type: 'video/webm' });
+        const url = window.URL.createObjectURL(blob);
+        window.open(url);
     }
 }
 

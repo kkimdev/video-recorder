@@ -9,21 +9,17 @@ class App extends LitElement {
         return {
             capabilities: Object,
             settings: Object,
+            track: Object,
         };
     }
 
-    _render({ capabilities, settings }) {
-        // console.log('capabilities : ', capabilities);
-        // console.log('settings : ', settings);
-
+    _render({ capabilities, settings, track }) {
         if (capabilities === undefined)
             return html``;
 
         let itemTemplates = [];
         for (const capName in capabilities) {
             const value = capabilities[capName];
-            // console.log(value);
-            // console.log(value instanceof MediaSettingsRange);
             if (value instanceof Array) {
                 itemTemplates.push(html`<div>
     <mwc-formfield alignEnd label=${capName}>`);
@@ -71,24 +67,16 @@ class App extends LitElement {
         return html`${itemTemplates}`;
     }
 
-    get track() {
-        return this._track;
-    }
-
     set track(track) {
         this._track = track;
-        if (track === null) {
-            this.capabilities = undefined;
-            this.settings = undefined;
-        } else {
-            this.capabilities = track.getCapabilities();
-            this.settings = track.getSettings();
+        this.capabilities = undefined;
+        this.settings = undefined;
+        if (track !== undefined) {
+            window.setTimeout(() => {
+                this.capabilities = track.getCapabilities();
+                this.settings = track.getSettings();
+            }, 1000);
         }
-    }
-    ready() {
-        super.ready();
-        console.log(Object.keys(this));
-        console.log(this.attributes);
     }
 }
 
