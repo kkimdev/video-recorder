@@ -47,7 +47,7 @@ class App extends LitElement {
         }
     }
 
-    _render({ devices, tracks }) {
+    _render({ devices, tracks, _isRecording }) {
         if (devices === undefined) devices = [];
         if (tracks === undefined) tracks = [];
 
@@ -71,9 +71,11 @@ class App extends LitElement {
         </mwc-tab-bar-fix>
         <iron-pages id="pages" selected="0">
             <div>
-                <mwc-button raised onclick="${this._startOrStopRecording.bind(this)}">Record</mwc-button>
+                <mwc-button raised onclick="${this._startOrStopRecording.bind(this)}">
+                    ${_isRecording ? "Stop" : "Record"}
+                </mwc-button>
             </div>
-            <div>                
+            <div>
                 <div class="select">
                     <label for="audioSource">Audio input source: </label>
                     <select id="audioSource" onchange="${this._start.bind(this)}">
